@@ -5,6 +5,7 @@ const cardSchema = mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   translation: {
     type: String,
