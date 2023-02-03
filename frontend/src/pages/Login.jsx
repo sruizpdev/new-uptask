@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Login = () => {
   return (
     <>
@@ -25,8 +27,16 @@ const Login = () => {
             placeholder="Introduce tu password"
           />
         </div>
-        <input type="submit" value="Iniciar Sesión" className="w-full bg-slate-700 text-white uppercase py-2 hover:cursor-pointer hover:bg-slate-500" />
+        <input
+          type="submit"
+          value="Iniciar Sesión"
+          className="w-full bg-slate-700 text-white uppercase py-2 hover:cursor-pointer hover:bg-slate-500"
+        />
       </form>
+      <nav className="flex justify-between">
+        <Link to="register" className="block uppercase my-2 text-sm">No tienes cuenta? Registrate</Link>
+        <Link to="forgot-password" className="block uppercase my-2 text-sm">Olvidé mi password</Link>
+      </nav>
     </>
   );
 };
