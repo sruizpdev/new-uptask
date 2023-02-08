@@ -19,4 +19,28 @@ const createNewUser = async (req, res) => {
     console.log(error);
   }
 };
-export { createNewUser };
+
+const autenticar = async (req, res) => {
+  const { email, password } = req.body;
+
+  const usuario = await User.findOne({ email });
+  if (!usuario) {
+    const error = new Error("El usuario no existe");
+    return res.status(404).json({ msg: error.message });
+  }
+  if (!usuario.confirmed) {
+    const error = new Error("Cuenta no confirmada");
+    return res.status(403).json({ msg: error.message });
+  }
+  if (await usuario.comprobarPassword(password)) {
+    res.json({
+      _id: usuario._id,
+      nombre: usuario.name,
+      email: usuario.email,
+    });
+  } else {
+    const error = new Error("El password es incorrecto");
+    return res.status(403).json({ msg: error.message });
+  }
+};
+export { createNewUser, autenticar };
