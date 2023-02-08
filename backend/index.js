@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import conectarDB from "./config/db.js";
 import cardRoutes from './routes/cardRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 // probar con require para dotenv
 
@@ -12,7 +13,9 @@ app.use(express.json());
 dotenv.config();
 conectarDB();
 
+app.use('/api/users', userRoutes)
 app.use("/api/cards", cardRoutes);
+
 
 const PORT = process.env.PORT || 4001;
 
