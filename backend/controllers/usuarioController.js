@@ -1,8 +1,8 @@
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
-import User from "../models/User.js";
+import User from "../models/Usuario.js";
 
-const createNewUser = async (req, res) => {
+const creacionNuevoUsuario = async (req, res) => {
   const { email } = req.body;
   const existUser = await User.findOne({ email });
 
@@ -11,11 +11,11 @@ const createNewUser = async (req, res) => {
     return res.status(400).json({ msg: error.message });
   }
   try {
-    const user = new User(req.body);
-    user.token = generarId();
-    const userSaved = await user.save();
+    const usuario = new User(req.body);
+    usuario.token = generarId();
+    const usuarioGuardado = await usuario.save();
 
-    res.json(userSaved);
+    res.json(usuarioGuardado);
   } catch (error) {
     console.log(error);
   }
@@ -36,7 +36,7 @@ const autenticar = async (req, res) => {
   if (await usuario.comprobarPassword(password)) {
     res.json({
       _id: usuario._id,
-      nombre: usuario.name,
+      nombre: usuario.nombre,
       email: usuario.email,
       token: generarJWT(usuario._id),
     });
@@ -120,7 +120,7 @@ const perfil = async (req, res) => {
   res.json(usuario);
 };
 export {
-  createNewUser,
+  creacionNuevoUsuario,
   autenticar,
   confirmar,
   olvidePassword,

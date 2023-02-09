@@ -1,6 +1,6 @@
-import Card from "../models/Card.js";
+import Card from "../models/Tarjeta.js";
 
-const createNewCard = async (req, res) => {
+const crearNuevaTarjeta = async (req, res) => {
   const { word } = req.body;
 
   const duplicateWord = await Card.findOne({ word });
@@ -17,7 +17,7 @@ const createNewCard = async (req, res) => {
   }
 };
 
-const getCard = async (req, res) => {
+const obtenerTarjeta = async (req, res) => {
   const { word } = req.params;
 
   const existWord = await Card.findOne({ word });
@@ -33,4 +33,4 @@ const getCard = async (req, res) => {
     console.log(error);
   }
 };
-export { createNewCard, getCard };
+export { crearNuevaTarjeta, obtenerTarjeta };
