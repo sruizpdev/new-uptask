@@ -8,4 +8,5 @@ const router = express.Router();
 
 router.post("/", crearNuevaTarjeta);
 router.post("/obtener-tarjeta/:word", obtenerTarjeta);
+
 export default router;
