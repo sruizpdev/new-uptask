@@ -34,34 +34,53 @@ const obtenerProyecto = async (req, res) => {
 };
 
 const editarProyecto = async (req, res) => {
-    const { id } = req.params;
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      const proyecto = await Proyecto.findById(id);
-  
-      if (proyecto.creador.toString() !== req.usuario._id.toString()) {
-        const error = new Error("No tienes los permisos");
-        return res.status(401).json({ msg: error.message });
-      }
+  const { id } = req.params;
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    const proyecto = await Proyecto.findById(id);
 
-      proyecto.nombre = req.body.nombre || proyecto.nombre;
-      proyecto.descripcion = req.body.descripcion || proyecto.descripcion;
-      proyecto.fechaEntrega = req.body.fechaEntrega || proyecto.fechaEntrega;
-      proyecto.cliente = req.body.cliente || proyecto.cliente;
+    if (proyecto.creador.toString() !== req.usuario._id.toString()) {
+      const error = new Error("No tienes los permisos");
+      return res.status(401).json({ msg: error.message });
+    }
+
+    proyecto.nombre = req.body.nombre || proyecto.nombre;
+    proyecto.descripcion = req.body.descripcion || proyecto.descripcion;
+    proyecto.fechaEntrega = req.body.fechaEntrega || proyecto.fechaEntrega;
+    proyecto.cliente = req.body.cliente || proyecto.cliente;
+
+    try {
+      const proyectoAlmacenado = await proyecto.save();
+      res.json(proyectoAlmacenado);
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    const error = new Error("No Encontrado");
+    return res.status(404).json({ msg: error.message });
+  }
+};
+const eliminarProyecto = async (req, res) => {
+  const { id } = req.params;
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    const proyecto = await Proyecto.findById(id);
+
+    if (proyecto.creador.toString() !== req.usuario._id.toString()) {
+      const error = new Error("No tienes los permisos");
+      return res.status(401).json({ msg: error.message });
+    }
     
-      try {
-        const proyectoAlmacenado = await proyecto.save();
-        res.json(proyectoAlmacenado);
+    try {
+        await proyecto.deleteOne();
+        res.json({ msg: "Proyecto Eliminado" });
       } catch (error) {
         console.log(error);
       }
-
-  
-    } else {
-      const error = new Error("No Encontrado");
-      return res.status(404).json({ msg: error.message });
-    }
+    
+  } else {
+    const error = new Error("No Encontrado");
+    return res.status(404).json({ msg: error.message });
+  }
 };
-const eliminarProyecto = async (req, res) => {};
 const agregarColaborador = async (req, res) => {};
 const eliminarColaborador = async (req, res) => {};
 const obtenerTareas = async (req, res) => {};
