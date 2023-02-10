@@ -16,7 +16,23 @@ const nuevoProyecto = async (req, res) => {
   }
 };
 
-const obtenerProyecto = async (req, res) => {};
+const obtenerProyecto = async (req, res) => {
+  const { id } = req.params;
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    const proyecto = await Proyecto.findById(id);
+
+    if (proyecto.creador.toString() !== req.usuario._id.toString()) {
+      const error = new Error("No tienes los permisos");
+      return res.status(401).json({ msg: error.message });
+    }
+
+    res.json(proyecto);
+  } else {
+    const error = new Error("No Encontrado");
+    return res.status(404).json({ msg: error.message });
+  }
+};
+
 const editarProyecto = async (req, res) => {};
 const eliminarProyecto = async (req, res) => {};
 const agregarColaborador = async (req, res) => {};
