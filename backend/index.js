@@ -4,6 +4,7 @@ import conectarDB from "./config/db.js";
 import tarjetaRoutes from "./routes/tarjetaRoutes.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import proyectoRoutes from "./routes/proyectoRoutes.js";
+import tareaRoutes from './routes/tareaRoutes.js'
 
 const app = express();
 
@@ -14,6 +15,7 @@ conectarDB();
 
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/proyectos", proyectoRoutes);
+app.use('/api/tareas', tareaRoutes)
 
 app.use("/api/tarjetas", tarjetaRoutes);
 
