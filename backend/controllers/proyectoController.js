@@ -1,4 +1,5 @@
 import Proyecto from "../models/Proyecto.js";
+import Tarea from "../models/Tarea.js";
 
 const obtenerProyectos = async (req, res) => {
   const proyectos = await Proyecto.find().where("creador").equals(req.usuario);
@@ -25,8 +26,8 @@ const obtenerProyecto = async (req, res) => {
       const error = new Error("No tienes los permisos");
       return res.status(401).json({ msg: error.message });
     }
-
-    res.json(proyecto);
+    const tareas = Tarea.find().where("proyecto").equals(proyecto._id);
+    res.json({ proyecto, tareas });
   } else {
     const error = new Error("No Encontrado");
     return res.status(404).json({ msg: error.message });
@@ -68,14 +69,13 @@ const eliminarProyecto = async (req, res) => {
       const error = new Error("No tienes los permisos");
       return res.status(401).json({ msg: error.message });
     }
-    
+
     try {
-        await proyecto.deleteOne();
-        res.json({ msg: "Proyecto Eliminado" });
-      } catch (error) {
-        console.log(error);
-      }
-    
+      await proyecto.deleteOne();
+      res.json({ msg: "Proyecto Eliminado" });
+    } catch (error) {
+      console.log(error);
+    }
   } else {
     const error = new Error("No Encontrado");
     return res.status(404).json({ msg: error.message });
@@ -83,7 +83,6 @@ const eliminarProyecto = async (req, res) => {
 };
 const agregarColaborador = async (req, res) => {};
 const eliminarColaborador = async (req, res) => {};
-const obtenerTareas = async (req, res) => {};
 
 export {
   obtenerProyectos,
@@ -93,5 +92,4 @@ export {
   eliminarProyecto,
   agregarColaborador,
   eliminarColaborador,
-  obtenerTareas,
 };

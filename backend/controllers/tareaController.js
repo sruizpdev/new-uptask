@@ -13,10 +13,10 @@ const agregarTarea = async (req, res) => {
     return res.status(404).json({ msg: error.message });
   }
   res.json(existeProyecto);
-  if (existeProyecto.creador.toString() !== req.usuario._id.toString()) {
+  /* if (existeProyecto.creador.toString() !== req.usuario._id.toString()) {
     const error = new Error("No tienes los permisos");
     return res.status(401).json({ msg: error.message });
-  }
+  } */
   try {
     const tareaAlmacenada = await Tarea.create(req.body);
     res.json(tareaAlmacenada);
@@ -53,19 +53,40 @@ const actualizarTarea = async (req, res) => {
       const error = new Error("Accion no valida");
       return res.status(401).json({ msg: error.message });
     }
-    tarea.nombre = req.body.nombre || tarea.nombre
-    tarea.descripcion = req.body.descripcion || tarea.descripcion
-    tarea.prioridad = req.body.prioridad || tarea.prioridad
-    tarea.fechaEntrega = req.body.fechaEntrega || tarea.fechaEntrega
+    tarea.nombre = req.body.nombre || tarea.nombre;
+    tarea.descripcion = req.body.descripcion || tarea.descripcion;
+    tarea.prioridad = req.body.prioridad || tarea.prioridad;
+    tarea.fechaEntrega = req.body.fechaEntrega || tarea.fechaEntrega;
     try {
-        const tareaAlmacenada = await tarea.save()
-        res.json(tareaAlmacenada)
+      const tareaAlmacenada = await tarea.save();
+      res.json(tareaAlmacenada);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   }
 };
-const eliminarTarea = async (req, res) => {};
+const eliminarTarea = async (req, res) => {
+  const { id } = req.params;
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    const tarea = await Tarea.findById(id).populate("proyecto");
+
+    if (!tarea) {
+      const error = new Error("Tarea no encontrada");
+      return res.status(404).json({ msg: error.message });
+    }
+    if (tarea.proyecto.creador.toString() !== req.usuario._id.toString()) {
+      const error = new Error("Accion no valida");
+      return res.status(401).json({ msg: error.message });
+    }
+
+    try {
+      await tarea.deleteOne();
+      res.json({ msg: "Tarea eliminada" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 const cambiarEstado = async (req, res) => {};
 export {
   agregarTarea,
