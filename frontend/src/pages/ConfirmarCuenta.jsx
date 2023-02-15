@@ -1,9 +1,9 @@
-
-
 const ConfirmarCuenta = () => {
   return (
-    <div>ConfirmarCuenta</div>
-  )
-}
+    <>
+      <h1 className="text-sky-600 text-4xl">Confirma tu cuenta</h1>
+    </>
+  );
+};
 
-export default ConfirmarCuenta
+export default ConfirmarCuenta;

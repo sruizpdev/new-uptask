@@ -34,8 +34,8 @@ const Login = () => {
         />
       </form>
       <nav className="flex justify-between">
-        <Link to="registrar" className="block uppercase my-2 text-sm">No tienes cuenta? Registrate</Link>
-        <Link to="olvide-password" className="block uppercase my-2 text-sm">Olvidé mi password</Link>
+        <Link to="/registrar" className="block uppercase my-2 text-sm">No tienes cuenta? Registrate</Link>
+        <Link to="/olvide-password" className="block uppercase my-2 text-sm">Olvidé mi password</Link>
       </nav>
     </>
   );
