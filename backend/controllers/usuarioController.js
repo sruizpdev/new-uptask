@@ -1,3 +1,4 @@
+import { emailRegistro } from "../helpers/email.js";
 import generarId from "../helpers/generarId.js";
 import generarJWT from "../helpers/generarJWT.js";
 import User from "../models/Usuario.js";
@@ -13,9 +14,14 @@ const creacionNuevoUsuario = async (req, res) => {
   try {
     const usuario = new User(req.body);
     usuario.token = generarId();
-    const usuarioGuardado = await usuario.save();
+    await usuario.save();
+    emailRegistro({
+      email: usuario.email,
+      nombre: usuario.nombre,
+      token: usuario.token,
+    });
 
-    res.json(usuarioGuardado);
+    res.json({ msg: "Usuario creado correctamente" });
   } catch (error) {
     console.log(error);
   }

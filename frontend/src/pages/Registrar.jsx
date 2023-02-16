@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Alerta from "../components/Alerta";
+import axios from "axios";
 
 const Registrar = () => {
   const [nombre, setNombre] = useState("");
@@ -9,21 +10,43 @@ const Registrar = () => {
   const [repetirPassword, setRepetirPassword] = useState("");
   const [alerta, setAlerta] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if ([nombre, email, password, repetirPassword].includes("")) {
       setAlerta({ msg: "Todos los campos son obligatorios", error: true });
-
       return;
     }
+    if (password !== repetirPassword) {
+      setAlerta({ msg: "Los passwords no son iguales", error: true });
+      return;
+    }
+    setAlerta({});
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usuarios`, {
+        nombre,
+        email,
+        password,
+      });
+      setAlerta({ msg: data.msg, error: false });
+      setNombre("");
+      setEmail("");
+      setPassword("");
+      setRepetirPassword("");
+    } catch (error) {
+      setAlerta({
+        msg: error.response.data.msg,
+        error: false,
+      });
+    }
   };
+
   const { msg } = alerta;
   return (
     <>
       <h1 className="text-sky-600 text-4xl">
         Crea tu cuenta y administra tus proyectos
       </h1>
-      {msg && <Alerta alerta={alerta}/>}
+      {msg && <Alerta alerta={alerta} />}
       <form className="my-5 bg-white p-5" onSubmit={handleSubmit}>
         <div className="my-3">
           <label className="uppercase block font-bold" htmlFor="nombre">
