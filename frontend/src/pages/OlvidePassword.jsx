@@ -24,6 +24,7 @@ const OlvidePassword = () => {
         }
       );
       setAlerta({msg: data.msg, error:false})
+      
     } catch (error) {
       setAlerta({ msg: error.response.data.msg, error: true });
     }
