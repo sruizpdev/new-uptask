@@ -36,6 +36,9 @@ export const emailOlvidePassword = async (datos) => {
     },
   });
 
+
+  
+
   const info = await transport.sendMail({
     from: '"Uptask - Administrador de proyectos"<cuentas@uptask.com',
     to: email,
